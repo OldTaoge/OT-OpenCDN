@@ -1,47 +1,39 @@
-    var xmlhttp = false;
-    function createRequest(url, callback=alertContents) {
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-            if(xmlhttp.overrideMimeType){
-                xmlhttp.overrideMimeType("text/xml");
-            }
-        } else if(window.ActiveXObject) {
-            try{
-                xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-            }catch (e) {
-                try {
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP")
-                }catch (e) {}
-            }
+function createXMLHttpRequest() {
+    var request = false;
+    if(window.XMLHttpRequest) {
+        request = new XMLHttpRequest();
+        if(request.overrideMimeType) {
+            request.overrideMimeType('text/xml');
         }
-        if(!xmlhttp){
-            alert("不能创建xmlhttp实例，请不要使用兼容模式或更换浏览器！")
-            return false;
+    } else if(window.ActiveXObject) {
+        var versions = ['Microsoft.XMLHTTP', 'MSXML.XMLHTTP', 'Microsoft.XMLHTTP',
+            'Msxml2.XMLHTTP.7.0', 'Msxml2.XMLHTTP.6.0', 'Msxml2.XMLHTTP.5.0',
+            'Msxml2.XMLHTTP.4.0', 'MSXML2.XMLHTTP.3.0', 'MSXML2.XMLHTTP'];
+        for(var i=0; i<versions.length; i++) {
+            try {
+                request = new ActiveXObject(versions[i]);
+                if(request) {
+                    return request;
+                }
+            } catch(e) {}
         }
-        xmlhttp.onreadystatechange = callback;
-        xmlhttp.open("GET", url, true);
+    }
+    return request;
+}
+function ajax(xmlhttp,_method, _url, _param, _callback) {
+    if (typeof xmlhttp == 'undefined') return;
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            _callback(xmlhttp);
+        }
+    }
+    xmlhttp.open(_method, _url, true);
+    if (_method == "POST") {
+        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlhttp.setRequestHeader("Content-Length", _param.length);
+        xmlhttp.send(_param);
+    }
+    else {
         xmlhttp.send(null);
     }
-    function createRequest_POST(url, send_form, callback=alertContents) {
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-            if(xmlhttp.overrideMimeType){
-                xmlhttp.overrideMimeType("text/xml");
-            }
-        } else if(window.ActiveXObject) {
-            try{
-                xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-            }catch (e) {
-                try {
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP")
-                }catch (e) {}
-            }
-        }
-        if(!xmlhttp){
-            alert("不能创建xmlhttp实例，请不要使用兼容模式或更换浏览器！")
-            return false;
-        }
-        xmlhttp.onreadystatechange = callback;
-        xmlhttp.open("POST", url, true);
-        xmlhttp.send(send_form);
-    }
+}
