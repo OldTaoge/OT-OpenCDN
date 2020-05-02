@@ -4,8 +4,8 @@ try {
     $.ajax({url: "/live2d/waifu-tips.min.js", dataType:"script", cache: true, success: function() {
         $.ajax({url: "/live2d/live2d.min.js", dataType:"script", cache: true, success: function() {
             /* 可直接修改部分参数 */
-            live2d_settings['hitokotoAPI'] = "hitokoto.cn";  // 一言 API
-            //live2d_settings['modelId'] = 1;                  // 默认模型 ID
+            live2d_settings['hitokotoAPI'] = "hitokoto.cn";
+            live2d_settings['canTurnToAboutPage'] = false;
             //live2d_settings['modelTexturesId'] = 55;          // 默认材质 ID
             //live2d_settings['modelStorage'] = false;         // 不储存模型 ID
             /* 在 initModel 前添加 */
