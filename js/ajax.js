@@ -30,7 +30,6 @@ function ajax(xmlhttp,_method, _url, _param, _callback) {
     xmlhttp.open(_method, _url, true);
     if (_method == "POST") {
         xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xmlhttp.setRequestHeader("Content-Length", _param.length);
         xmlhttp.send(_param);
     }
     else {
